@@ -8,13 +8,13 @@ import (
 )
 
 type params struct {
-	Memory    uint32 // m=
-	Iteration uint32 // t=
-	Parallel  uint8  // p=
-	SaltLen   uint8  // Longueur du salt si auto-generation
-	HashLen   uint32
-	Version   int
-	Argon2id  bool // type
+	Memory     uint32 // m=
+	Iteration  uint32 // t=
+	Parallel   uint8  // p=
+	SaltLength uint8  // Longueur du salt si auto-generation
+	HashLength uint32
+	Version    int
+	Argon2id   bool // type
 }
 
 type Argon2id struct {
@@ -27,14 +27,23 @@ type ByteString interface {
 	[]byte | string
 }
 
-var DefaultParams = &params{
-	Memory:    64,
-	Iteration: 1,
-	Parallel:  uint8(runtime.NumCPU()),
-	SaltLen:   16,
-	HashLen:   32,
-	Version:   argon2.Version,
-	Argon2id:  true,
+var DefaultParams = func() *params {
+
+	var p uint8 = 4
+
+	if runtime.NumCPU() < 4 {
+		p = 1
+	}
+
+	return &params{
+		Memory:     4,
+		Iteration:  3,
+		Parallel:   p,
+		SaltLength: 16,
+		HashLength: 32,
+		Version:    argon2.Version,
+		Argon2id:   true,
+	}
 }
 
 func strToByte[T ByteString](input T) (data []byte, err error) {
