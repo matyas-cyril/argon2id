@@ -79,7 +79,7 @@ func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error
 					return nil, nil, nil, fmt.Errorf("failed to decode pass : %s", err)
 				}
 
-				p.HashLen = uint32(len(decodePass))
+				p.HashLength = uint32(len(decodePass))
 				pass = decodePass
 
 				continue
@@ -94,7 +94,7 @@ func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error
 					return nil, nil, nil, fmt.Errorf("failed to decode salt : %s", err)
 				}
 
-				p.SaltLen = uint8(nbr)
+				p.SaltLength = uint8(nbr)
 				salt = decodedSalt
 				continue
 			}
@@ -103,7 +103,7 @@ func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error
 	}
 
 	if !p.Argon2id || p.Iteration == 0 || p.Memory == 0 ||
-		p.Parallel == 0 || p.SaltLen == 0 || p.Version == 0 || p.HashLen == 0 {
+		p.Parallel == 0 || p.SaltLength == 0 || p.Version == 0 || p.HashLength == 0 {
 		return nil, nil, nil, fmt.Errorf("hash invalid")
 	}
 

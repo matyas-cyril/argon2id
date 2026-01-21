@@ -15,7 +15,7 @@ func encode(password, salt []byte, p *params) (b64Hash []byte, b64Salt []byte, p
 
 		var err error
 		// Génération automatique d'un salt
-		salt, err = genSalt(p.SaltLen)
+		salt, err = genSalt(p.SaltLength)
 		if err != nil {
 			return nil, nil, nil, err
 		}
@@ -24,7 +24,7 @@ func encode(password, salt []byte, p *params) (b64Hash []byte, b64Salt []byte, p
 	b64Salt = make([]byte, base64.RawStdEncoding.EncodedLen(len(salt)))
 	base64.RawStdEncoding.Encode(b64Salt, salt)
 
-	hash := argon2.IDKey(password, salt, p.Iteration, p.Memory, p.Parallel, p.HashLen)
+	hash := argon2.IDKey(password, salt, p.Iteration, p.Memory, p.Parallel, p.HashLength)
 	b64Hash = make([]byte, base64.RawStdEncoding.EncodedLen(len(hash)))
 	base64.RawStdEncoding.Encode(b64Hash, hash)
 
