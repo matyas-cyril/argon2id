@@ -1,6 +1,7 @@
 package argon2id
 
 import (
+	"bytes"
 	"fmt"
 )
 
@@ -30,12 +31,13 @@ func Check[T ByteString](hash T, password T) (verif bool, err error) {
 		return false, err
 	}
 
-	fmt.Println("VERIF -> ", paramHash, passHash, string(saltHash))
-	fmt.Println("PASSWORD", string(passBytes))
+	// Chiffrement du mot de passe avec le pass hash du hash décomposé
 	srcHash, _, _, err := encode(passBytes, saltHash, paramHash)
-	fmt.Println(srcHash)
+	if err != nil {
+		return false, err
+	}
 
-	return false, nil
+	return bytes.Equal(passHash, srcHash), nil
 }
 
 // Hasher via un salt auto généré

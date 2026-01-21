@@ -7,12 +7,12 @@ import (
 	"strconv"
 )
 
-func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error) {
+func decodeHash(hash []byte) (param *params, b64Pass []byte, salt []byte, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
 			param = nil
-			pass = nil
+			b64Pass = nil
 			salt = nil
 			err = fmt.Errorf("panic error : %s", pErr)
 		}
@@ -70,18 +70,15 @@ func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error
 				continue
 			}
 
-			// Pass
+			// Password en base64
 			if i == hashLength-1 {
-
+				b64Pass = parts
 				decodePass := make([]byte, base64.RawStdEncoding.DecodedLen(len(parts)))
 				_, err := base64.RawStdEncoding.Decode(decodePass, parts)
 				if err != nil {
 					return nil, nil, nil, fmt.Errorf("failed to decode pass : %s", err)
 				}
-
 				p.HashLength = uint32(len(decodePass))
-				pass = decodePass
-
 				continue
 			}
 
@@ -107,5 +104,5 @@ func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error
 		return nil, nil, nil, fmt.Errorf("hash invalid")
 	}
 
-	return &p, pass, salt, nil
+	return &p, b64Pass, salt, nil
 }
