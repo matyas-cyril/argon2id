@@ -7,6 +7,11 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
+const (
+	SALT_MIN_LENGTH = 8
+	SALT_MAX_LENGTH = 100
+)
+
 type params struct {
 	Memory     uint32 // m=
 	Iteration  uint32 // t=

@@ -44,8 +44,8 @@ func genHash(b64Hash, b64Salt []byte, p *params) ([]byte, error) {
 // length doit être >= 8 et <= 100
 func genSalt(length uint8) ([]byte, error) {
 
-	if length < 8 || length > 100 {
-		return nil, fmt.Errorf("salt must be at least 8 characters and must be maximum 100 characters long")
+	if length < SALT_MIN_LENGTH || length > SALT_MAX_LENGTH {
+		return nil, fmt.Errorf("salt must be at least %d characters and must be maximum %d characters long", SALT_MIN_LENGTH, SALT_MAX_LENGTH)
 	}
 
 	rnd := rand.New(rand.NewSource(rand.Int63()))
