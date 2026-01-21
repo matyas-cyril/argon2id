@@ -49,7 +49,7 @@ func Hash[T ByteString](password T, p *params) (data []byte, err error) {
 	}()
 
 	if p == nil {
-		p = DefaultParams
+		p = DefaultParams()
 	}
 
 	pwdBytes, err := strToByte(password)
@@ -75,7 +75,7 @@ func HashWithSalt[T ByteString](password T, salt T, p *params) (data []byte, err
 	}()
 
 	if p == nil {
-		p = DefaultParams
+		p = DefaultParams()
 	}
 
 	saltBytes, err := strToByte(salt)
@@ -99,4 +99,49 @@ func HashWithSalt[T ByteString](password T, salt T, p *params) (data []byte, err
 	}
 
 	return genHash(b64Hash, b64Salt, p)
+}
+
+func Params(args map[string]uint64) *params {
+
+	p := DefaultParams()
+
+	for key, v := range args {
+
+		switch key {
+
+		case "p": // [1-10]
+			if v < 1 || v > 10 {
+				return nil
+			}
+			p.Parallel = uint8(v)
+
+		case "m": // [80-100000]
+			if v < 80 || v > 100000 {
+				return nil
+			}
+			p.Memory = uint32(v)
+
+		case "t": // [1-20]
+			if v < 1 || v > 20 {
+				return nil
+			}
+			p.Iteration = uint32(v)
+
+		case "saltLength": // [8-100]
+			if v < 8 || v > 100 {
+				return nil
+			}
+			p.SaltLength = uint8(v)
+
+		case "hashLength": // [4-100]
+			if v < 4 || v > 100 {
+				return nil
+			}
+			p.HashLength = uint32(v)
+
+		default:
+			return nil
+		}
+	}
+	return p
 }
