@@ -7,7 +7,7 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-type Params struct {
+type params struct {
 	Memory    uint32 // m=
 	Iteration uint32 // t=
 	Parallel  uint8  // p=
@@ -18,7 +18,7 @@ type Params struct {
 }
 
 type Argon2id struct {
-	params *Params
+	params *params
 	salt   []byte
 	hash   []byte
 }
@@ -27,7 +27,7 @@ type ByteString interface {
 	[]byte | string
 }
 
-var DefaultParams = &Params{
+var DefaultParams = &params{
 	Memory:    64,
 	Iteration: 1,
 	Parallel:  uint8(runtime.NumCPU()),

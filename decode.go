@@ -7,7 +7,7 @@ import (
 	"strconv"
 )
 
-func decodeHash(hash []byte) (param *Params, pass []byte, salt []byte, err error) {
+func decodeHash(hash []byte) (param *params, pass []byte, salt []byte, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
@@ -26,7 +26,7 @@ func decodeHash(hash []byte) (param *Params, pass []byte, salt []byte, err error
 		return nil, nil, nil, fmt.Errorf("hash length invalid")
 	}
 
-	p := Params{}
+	p := params{}
 
 	for i, parts := range hashData {
 

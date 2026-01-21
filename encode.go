@@ -9,7 +9,7 @@ import (
 	"golang.org/x/crypto/argon2"
 )
 
-func encode(password, salt []byte, p *Params) (b64Hash []byte, b64Salt []byte, param *Params, err error) {
+func encode(password, salt []byte, p *params) (b64Hash []byte, b64Salt []byte, param *params, err error) {
 
 	if len(salt) == 0 {
 
@@ -31,7 +31,7 @@ func encode(password, salt []byte, p *Params) (b64Hash []byte, b64Salt []byte, p
 	return b64Hash, b64Salt, p, nil
 }
 
-func genHash(b64Hash, b64Salt []byte, p *Params) ([]byte, error) {
+func genHash(b64Hash, b64Salt []byte, p *params) ([]byte, error) {
 
 	var buf bytes.Buffer
 	fmt.Fprintf(&buf, "$argon2id$v=%d$m=%d,t=%d,p=%d$%s$%s", argon2.Version, p.Memory, p.Iteration, p.Parallel, b64Salt, b64Hash)
