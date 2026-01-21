@@ -75,7 +75,7 @@ func HashWithSalt[T ByteString](password T, salt T, p *params) (data []byte, err
 	}()
 
 	if p == nil {
-		p = DefaultParams()
+		return nil, fmt.Errorf("params not defined")
 	}
 
 	saltBytes, err := strToByte(salt)
