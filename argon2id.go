@@ -118,9 +118,16 @@ func HashWithSalt[T ByteString](password, salt T, p *params) (data []byte, err e
 	return genHash(b64Hash, b64Salt, p)
 }
 
-func Params(args map[string]uint64) *params {
+func Params(args map[string]uint64) (p *params, err error) {
 
-	p := DefaultParams()
+	defer func() {
+		if pErr := recover(); pErr != nil {
+			p = nil
+			err = fmt.Errorf("panic error : %s", pErr)
+		}
+	}()
+
+	p = DefaultParams()
 
 	for key, v := range args {
 
@@ -128,37 +135,37 @@ func Params(args map[string]uint64) *params {
 
 		case "p": // [1-10]
 			if v < 1 || v > 10 {
-				return nil
+				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.Parallel = uint8(v)
 
 		case "m": // [80-100000]
 			if v < 80 || v > 100000 {
-				return nil
+				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.Memory = uint32(v)
 
 		case "t": // [1-20]
 			if v < 1 || v > 20 {
-				return nil
+				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.Iteration = uint32(v)
 
 		case "saltLength": // [SALT_MIN_LENGTH - SALT_MAX_LENGTH]
 			if v < SALT_MIN_LENGTH || v > SALT_MAX_LENGTH {
-				return nil
+				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.SaltLength = uint8(v)
 
 		case "hashLength": // [4-100]
 			if v < 4 || v > 100 {
-				return nil
+				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.HashLength = uint32(v)
 
 		default:
-			return nil
+			return nil, fmt.Errorf("key '%s' not exist", key)
 		}
 	}
-	return p
+	return p, nil
 }
