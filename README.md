@@ -13,6 +13,7 @@ Permet de générer et de vérifier un hash de mot de passe de type Argon2id.
 ```bash
 go get github.com/matyas-cyril/argon2id
 ```
+*[Retour Index](#index)*
 
 ## Paramètres
 
@@ -24,4 +25,8 @@ go get github.com/matyas-cyril/argon2id
 | saltLength | uint8 | 16 | 64 | 16 | Nombre d'octets du salt lors de l'autogénération |
 | hashLength | uint32 | 16 | 128 | 32 | Nombre d'octets du hash.<br>Une longueur de hachage plus longue fournit une meilleure sécurité contre les collisions. |
 
+*[Retour Index](#index)*
+
 ## Exemples
+
+*[Retour Index](#index)*
