@@ -6,7 +6,7 @@ import (
 )
 
 // password -> mot de passe à vérifier
-func Check[T ByteString](password, hash T) (verif bool, err error) {
+func Check[P ByteString, H ByteString](password P, hash H) (verif bool, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
@@ -49,7 +49,7 @@ func Check[T ByteString](password, hash T) (verif bool, err error) {
 }
 
 // Hasher via un salt auto généré
-func Hash[T ByteString](password T, p *params) (data []byte, err error) {
+func Hash[P ByteString](password P, p *params) (data []byte, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
@@ -79,7 +79,7 @@ func Hash[T ByteString](password T, p *params) (data []byte, err error) {
 	return genHash(b64Hash, b64Salt, p)
 }
 
-func HashWithSalt[T ByteString](password, salt T, p *params) (data []byte, err error) {
+func HashWithSalt[P ByteString, S ByteString](password P, salt S, p *params) (data []byte, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
