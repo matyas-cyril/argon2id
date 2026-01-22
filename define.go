@@ -51,10 +51,7 @@ var DefaultParams = func() *params {
 
 	var p uint8 = 4
 	var t uint32 = 3
-	var m uint32 = 64 * 1024 // 64Mo -> Ko
-
-	var mem runtime.MemStats
-	runtime.ReadMemStats(&mem)
+	var m uint32 = 32 * 1024 // 32Mo -> Ko
 
 	if runtime.NumCPU() < 4 {
 		p = 1
@@ -64,8 +61,8 @@ var DefaultParams = func() *params {
 		Memory:     m,
 		Iteration:  t,
 		Parallel:   p,
-		SaltLength: 16,
-		HashLength: 32,
+		SaltLength: 32,
+		HashLength: 64,
 		Version:    argon2.Version,
 		Argon2id:   true,
 	}
