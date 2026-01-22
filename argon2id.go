@@ -6,7 +6,7 @@ import (
 )
 
 // password -> mot de passe à vérifier
-func Check[T ByteString](hash T, password T) (verif bool, err error) {
+func Check[T ByteString](password, hash T) (verif bool, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
@@ -14,6 +14,14 @@ func Check[T ByteString](hash T, password T) (verif bool, err error) {
 			err = fmt.Errorf("panic error : %s", pErr)
 		}
 	}()
+
+	if isByteStringNull(password) {
+		return false, fmt.Errorf("password not defined")
+	}
+
+	if isByteStringNull(hash) {
+		return false, fmt.Errorf("hash not defined")
+	}
 
 	passBytes, err := strToByte(password)
 	if err != nil {
@@ -50,8 +58,12 @@ func Hash[T ByteString](password T, p *params) (data []byte, err error) {
 		}
 	}()
 
+	if isByteStringNull(password) {
+		return nil, fmt.Errorf("password not defined")
+	}
+
 	if p == nil {
-		p = DefaultParams()
+		return nil, fmt.Errorf("params not defined")
 	}
 
 	pwdBytes, err := strToByte(password)
@@ -67,7 +79,7 @@ func Hash[T ByteString](password T, p *params) (data []byte, err error) {
 	return genHash(b64Hash, b64Salt, p)
 }
 
-func HashWithSalt[T ByteString](password T, salt T, p *params) (data []byte, err error) {
+func HashWithSalt[T ByteString](password, salt T, p *params) (data []byte, err error) {
 
 	defer func() {
 		if pErr := recover(); pErr != nil {
@@ -76,6 +88,14 @@ func HashWithSalt[T ByteString](password T, salt T, p *params) (data []byte, err
 		}
 	}()
 
+	if isByteStringNull(password) {
+		return nil, fmt.Errorf("password not defined")
+	}
+
+	if isByteStringNull(salt) {
+		return nil, fmt.Errorf("salt not defined")
+	}
+
 	if p == nil {
 		return nil, fmt.Errorf("params not defined")
 	}
@@ -83,11 +103,6 @@ func HashWithSalt[T ByteString](password T, salt T, p *params) (data []byte, err
 	saltBytes, err := strToByte(salt)
 	if err != nil {
 		return nil, err
-	}
-
-	// Longueur >= 8 et <= 100
-	if len(saltBytes) != 0 && len(saltBytes) < 8 || len(saltBytes) > 100 {
-		return nil, fmt.Errorf("salt must be at least 8 characters and must be maximum 100 characters long")
 	}
 
 	pwdBytes, err := strToByte(password)
@@ -129,8 +144,8 @@ func Params(args map[string]uint64) *params {
 			}
 			p.Iteration = uint32(v)
 
-		case "saltLength": // [8-100]
-			if v < 8 || v > 100 {
+		case "saltLength": // [SALT_MIN_LENGTH - SALT_MAX_LENGTH]
+			if v < SALT_MIN_LENGTH || v > SALT_MAX_LENGTH {
 				return nil
 			}
 			p.SaltLength = uint8(v)
