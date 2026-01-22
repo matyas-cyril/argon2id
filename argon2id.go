@@ -134,19 +134,19 @@ func Params(args map[string]uint64) (p *params, err error) {
 		switch key {
 
 		case "p": // [1-10]
-			if v < 1 || v > 10 {
+			if v < THREAD_MIN_VALUE || v > THREAD_MAX_VALUE {
 				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.Parallel = uint8(v)
 
-		case "m": // [80-100000]
-			if v < 80 || v > 100000 {
+		case "m": // [1-4096] MO
+			if v < MEM_MIN_VALUE || v > MEM_MAX_VALUE {
 				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
-			p.Memory = uint32(v)
+			p.Memory = uint32(v * 1024) // Mo -> Ko
 
 		case "t": // [1-20]
-			if v < 1 || v > 20 {
+			if v < TIME_MIN_VALUE || v > TIME_MAX_VALUE {
 				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.Iteration = uint32(v)
@@ -158,7 +158,7 @@ func Params(args map[string]uint64) (p *params, err error) {
 			p.SaltLength = uint8(v)
 
 		case "hashLength": // [4-100]
-			if v < 4 || v > 100 {
+			if v < HASH_MIN_LENGTH || v > HASH_MAX_LENGTH {
 				return nil, fmt.Errorf("key '%s' invalid", key)
 			}
 			p.HashLength = uint32(v)
