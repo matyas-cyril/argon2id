@@ -63,3 +63,12 @@ func strToByte[T ByteString](input T) (data []byte, err error) {
 	}
 
 }
+
+func isByteStringNull[T ByteString](input T) bool {
+
+	switch any(input).(type) {
+	case []byte:
+		return []byte(input) == nil
+	}
+	return false
+}
