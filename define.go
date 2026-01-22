@@ -10,12 +10,27 @@ import (
 const (
 	SALT_MIN_LENGTH = 8
 	SALT_MAX_LENGTH = 100
+
+	HASH_MIN_LENGTH = 8
+	HASH_MAX_LENGTH = 100
+
+	// Memoire m=
+	MEM_MIN_VALUE = 1
+	MEM_MAX_VALUE = 4096
+
+	// Parallele p=
+	THREAD_MIN_VALUE = 1
+	THREAD_MAX_VALUE = 10
+
+	// Iterations t=
+	TIME_MIN_VALUE = 1
+	TIME_MAX_VALUE = 20
 )
 
 type params struct {
 	Memory     uint32 // m=
-	Iteration  uint32 // t=
-	Parallel   uint8  // p=
+	Iteration  uint32 // t= time
+	Parallel   uint8  // p= thread
 	SaltLength uint8  // Longueur du salt si auto-generation
 	HashLength uint32
 	Version    int
@@ -35,14 +50,19 @@ type ByteString interface {
 var DefaultParams = func() *params {
 
 	var p uint8 = 4
+	var t uint32 = 3
+	var m uint32 = 64 * 1024 // 64Mo -> Ko
+
+	var mem runtime.MemStats
+	runtime.ReadMemStats(&mem)
 
 	if runtime.NumCPU() < 4 {
 		p = 1
 	}
 
 	return &params{
-		Memory:     4,
-		Iteration:  3,
+		Memory:     m,
+		Iteration:  t,
 		Parallel:   p,
 		SaltLength: 16,
 		HashLength: 32,
