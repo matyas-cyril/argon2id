@@ -8,23 +8,31 @@ import (
 )
 
 const (
-	SALT_MIN_LENGTH = 8
-	SALT_MAX_LENGTH = 100
 
-	HASH_MIN_LENGTH = 8
-	HASH_MAX_LENGTH = 100
+	// Longueur en octet du Salt
+	SALT_MIN_LENGTH = 16
+	SALT_MAX_LENGTH = 64
+	SALT_DEF_LENGTH = 16
 
-	// Memoire m=
+	// Longueur en octet du hash
+	HASH_MIN_LENGTH = 16
+	HASH_MAX_LENGTH = 128
+	HASH_DEF_LENGTH = 32
+
+	// Memoire m= en Mo
 	MEM_MIN_VALUE = 1
 	MEM_MAX_VALUE = 4096
+	MEM_DEF_VALUE = 32
 
 	// Parallele p=
 	THREAD_MIN_VALUE = 1
-	THREAD_MAX_VALUE = 10
+	THREAD_MAX_VALUE = 20
+	THREAD_DEF_VALUE = 4
 
 	// Iterations t=
 	TIME_MIN_VALUE = 1
 	TIME_MAX_VALUE = 20
+	TIME_DEF_VALUE = 3
 )
 
 type params struct {
@@ -49,9 +57,9 @@ type ByteString interface {
 
 var DefaultParams = func() *params {
 
-	var p uint8 = 4
-	var t uint32 = 3
-	var m uint32 = 32 * 1024 // 32Mo -> Ko
+	var p uint8 = THREAD_DEF_VALUE
+	var t uint32 = TIME_DEF_VALUE
+	var m uint32 = MEM_DEF_VALUE * 1024 // 32Mo -> Ko
 
 	if runtime.NumCPU() < 4 {
 		p = 1
@@ -61,8 +69,8 @@ var DefaultParams = func() *params {
 		Memory:     m,
 		Iteration:  t,
 		Parallel:   p,
-		SaltLength: 32,
-		HashLength: 64,
+		SaltLength: SALT_DEF_LENGTH,
+		HashLength: HASH_DEF_LENGTH,
 		Version:    argon2.Version,
 		Argon2id:   true,
 	}
