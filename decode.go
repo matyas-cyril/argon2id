@@ -7,6 +7,7 @@ import (
 	"strconv"
 )
 
+// decodeHash permet d'obtenir à partir d'un hash, les paramètres utilisés, le salt et passhash en base64
 func decodeHash(hash []byte) (param *params, b64Pass []byte, salt []byte, err error) {
 
 	defer func() {
@@ -70,7 +71,7 @@ func decodeHash(hash []byte) (param *params, b64Pass []byte, salt []byte, err er
 				continue
 			}
 
-			// Password en base64
+			// Password haché en base64
 			if i == hashLength-1 {
 				b64Pass = parts
 				decodePass := make([]byte, base64.RawStdEncoding.DecodedLen(len(parts)))

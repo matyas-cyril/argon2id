@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-// password -> mot de passe à vérifier
+// Check vérifie la validité d'un mot de passe par rapport à un hash donné
 func Check[P ByteString, H ByteString](password P, hash H) (verif bool, err error) {
 
 	defer func() {
@@ -48,7 +48,7 @@ func Check[P ByteString, H ByteString](password P, hash H) (verif bool, err erro
 	return bytes.Equal(passHash, srcHash), nil
 }
 
-// Hasher via un salt auto généré
+// Hash génére un hash de type argon2id. Le salt est auto-généré par rapport au contenu de params
 func Hash[P ByteString](password P, p *params) (data []byte, err error) {
 
 	defer func() {
@@ -79,6 +79,7 @@ func Hash[P ByteString](password P, p *params) (data []byte, err error) {
 	return genHash(b64Hash, b64Salt, p)
 }
 
+// HaHashWithSalt génére un hash de type argon2i dont le salt est fourni par l'utilisateur
 func HashWithSalt[P ByteString, S ByteString](password P, salt S, p *params) (data []byte, err error) {
 
 	defer func() {
@@ -118,6 +119,7 @@ func HashWithSalt[P ByteString, S ByteString](password P, salt S, p *params) (da
 	return genHash(b64Hash, b64Salt, p)
 }
 
+// Params permet de personnaliser les paramètres pour la génération d'un hash argon2id
 func Params(args map[string]uint64) (p *params, err error) {
 
 	defer func() {
