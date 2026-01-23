@@ -79,7 +79,7 @@ func Hash[P ByteString](password P, p *params) (data []byte, err error) {
 	return genHash(b64Hash, b64Salt, p)
 }
 
-// HaHashWithSalt génére un hash de type argon2i dont le salt est fourni par l'utilisateur
+// HashWithSalt génére un hash de type argon2i dont le salt est fourni par l'utilisateur
 func HashWithSalt[P ByteString, S ByteString](password P, salt S, p *params) (data []byte, err error) {
 
 	defer func() {

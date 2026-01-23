@@ -59,4 +59,5 @@ func TestParams(t *testing.T) {
 	fmt.Println(argon2id.Params(map[string]uint64{"p": 10, "m": 1000}))
 	fmt.Println(argon2id.Params(map[string]uint64{"p": 10, "m": 1000, "t": 100}))
 	fmt.Println(argon2id.Params(map[string]uint64{"p": 10, "M": 1000}))
+
 }
